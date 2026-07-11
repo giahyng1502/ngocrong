@@ -13,6 +13,10 @@ chmod 400 "$PEM_KEY"
 echo "Creating remote directory..."
 ssh -o StrictHostKeyChecking=no -i "$PEM_KEY" $SERVER_USER@$SERVER_HOST "mkdir -p $REMOTE_DIR"
 
+# Compile Java locally using Ant
+echo "Compiling Java source code locally..."
+ant clean jar
+
 # Rsync files to the server
 echo "Uploading files to server..."
 rsync -avz -e "ssh -o StrictHostKeyChecking=no -i \"$PEM_KEY\"" \
@@ -20,6 +24,10 @@ rsync -avz -e "ssh -o StrictHostKeyChecking=no -i \"$PEM_KEY\"" \
   --exclude="PRJ_2Tab_550K" \
   --exclude="PRJ_2Tab_550K.rar" \
   --exclude="Teamobi2026.rar" \
+  --exclude="src" \
+  --exclude="build" \
+  --exclude="nbproject" \
+  --exclude=".git" \
   ./ $SERVER_USER@$SERVER_HOST:$REMOTE_DIR/
 
 # SSH into the server to install docker (if not installed) and run docker-compose
