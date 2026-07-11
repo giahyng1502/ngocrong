@@ -20,4 +20,4 @@ COPY data/ /app/data/
 COPY lib/ /app/lib/
 
 # Start the Java server
-CMD ["java", "-server", "-Dfile.encoding=UTF-8", "-jar", "server.jar"]
+CMD ["java", "-server", "-Dfile.encoding=UTF-8", "-cp", "lib/*:server.jar", "nro.models.server.ServerManager"]
