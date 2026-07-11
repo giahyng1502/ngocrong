@@ -147,6 +147,7 @@ public class TaskService {
                 msg.cleanup();
             }
         }
+        sendTaskMain(player);
     }
 
     public void sendInfoCurrentTask(Player player) {
