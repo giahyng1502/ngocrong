@@ -120,6 +120,7 @@ public class TaskService {
         sendTaskMain(player);
         Service.gI().sendThongBao(player, "Nhiệm vụ tiếp theo của bạn là "
                 + player.playerTask.taskMain.subTasks.get(player.playerTask.taskMain.index).name);
+        nro.models.database.PlayerDAO.updatePlayer(player);
     }
 
     public void sendUpdateCountSubTask(Player player) {
@@ -148,6 +149,7 @@ public class TaskService {
             }
         }
         sendTaskMain(player);
+        nro.models.database.PlayerDAO.updatePlayer(player);
     }
 
     public void sendInfoCurrentTask(Player player) {

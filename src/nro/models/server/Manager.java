@@ -1063,6 +1063,21 @@ public final class Manager {
         if ((value = properties.get("server.expserver")) != null) {
             RATE_EXP_SERVER = Byte.parseByte(String.valueOf(value));
         }
+        if ((value = properties.get("server.event.lunar")) != null) {
+            nro.models.event.EventManager.LUNNAR_NEW_YEAR = String.valueOf(value).equalsIgnoreCase("true");
+        }
+        if ((value = properties.get("server.event.christmas")) != null) {
+            nro.models.event.EventManager.CHRISTMAS = String.valueOf(value).equalsIgnoreCase("true");
+        }
+        if ((value = properties.get("server.event.halloween")) != null) {
+            nro.models.event.EventManager.HALLOWEEN = String.valueOf(value).equalsIgnoreCase("true");
+        }
+        if ((value = properties.get("server.event.hungvuong")) != null) {
+            nro.models.event.EventManager.HUNG_VUONG = String.valueOf(value).equalsIgnoreCase("true");
+        }
+        if ((value = properties.get("server.event.trungthu")) != null) {
+            nro.models.event.EventManager.TRUNG_THU = String.valueOf(value).equalsIgnoreCase("true");
+        }
         if ((value = properties.get("server.local")) != null) {
             LOCAL = String.valueOf(value).toLowerCase().equals("true");
         }

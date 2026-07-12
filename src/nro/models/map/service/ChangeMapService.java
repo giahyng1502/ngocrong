@@ -188,16 +188,21 @@ public class ChangeMapService {
         if (pl.isAdmin() || pl.isBoss || Util.canDoWithTime(pl.idMark.getLastTimeChangeZone(), 5000)) {
             pl.idMark.setLastTimeChangeZone(System.currentTimeMillis());
             Map map = pl.zone.map;
-            if (zoneId >= 0 && zoneId <= map.zones.size() - 1) {
-                Zone zoneJoin = map.zones.get(zoneId);
-                if (zoneJoin != null && (zoneJoin.getNumOfPlayers() >= zoneJoin.maxPlayer && !pl.isAdmin() && !pl.isBoss)) {
+            Zone zoneJoin = null;
+            for (Zone z : map.zones) {
+                if (z.zoneId == zoneId) {
+                    zoneJoin = z;
+                    break;
+                }
+            }
+            if (zoneJoin != null) {
+                if (zoneJoin.getNumOfPlayers() >= zoneJoin.maxPlayer && !pl.isAdmin() && !pl.isBoss) {
                     NpcService.gI().createTutorial(pl, -1, "Khu vực này đã đầy");
                     return;
                 }
-                if (zoneJoin != null) {
-                    changeMap(pl, zoneJoin, -1, -1, pl.location.x, pl.location.y, NON_SPACE_SHIP);
-                }
+                changeMap(pl, zoneJoin, -1, -1, pl.location.x, pl.location.y, NON_SPACE_SHIP);
             } else {
+                System.out.println("DEBUG ZONE CHANGE FAILED: player=" + pl.name + ", mapId=" + map.mapId + ", requestedZoneId=" + zoneId + ", availableZoneIds=" + map.zones.stream().map(z -> String.valueOf(z.zoneId)).collect(java.util.stream.Collectors.joining(",")));
                 Service.gI().sendThongBao(pl, "Không thể thực hiện");
             }
         } else {
