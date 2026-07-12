@@ -52,6 +52,10 @@ public class ItemService {
         item.content = item.getContent();
         item.info = item.getInfo();
         for (Item.ItemOption io : itemShop.options) {
+            if (io.optionTemplate.id == 31) {
+                item.quantity = io.param;
+                continue;
+            }
             item.itemOptions.add(new Item.ItemOption(io));
         }
         return item;

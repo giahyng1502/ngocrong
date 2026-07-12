@@ -80,6 +80,48 @@ public class ServerManager {
     }
 
     public static void main(String[] args) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("SHUTDOWN HOOK ACTIVATED: Saving all online players, clans, and shop...");
+            try {
+                // 1. Kick online players to trigger graceful save
+                try {
+                    Client.gI().close();
+                } catch (Exception e) {
+                    System.err.println("Error closing client sessions: " + e.getMessage());
+                }
+
+                // 2. Extra fallback: save any remaining active players
+                for (nro.models.player.Player player : Client.gI().getPlayers()) {
+                    if (player != null) {
+                        try {
+                            System.out.println("Fallback saving player: " + player.name);
+                            nro.models.database.PlayerDAO.updatePlayer(player);
+                        } catch (Exception e) {
+                            System.err.println("Error fallback saving player " + player.name + ": " + e.getMessage());
+                        }
+                    }
+                }
+
+                // 3. Save Clans
+                try {
+                    nro.models.services.ClanService.gI().close();
+                } catch (Exception e) {
+                    System.err.println("Error saving clans: " + e.getMessage());
+                }
+
+                // 4. Save Consign Shop
+                try {
+                    nro.models.shop_ky_gui.ConsignShopManager.gI().save();
+                } catch (Exception e) {
+                    System.err.println("Error saving consign shop: " + e.getMessage());
+                }
+
+            } catch (Exception e) {
+                System.err.println("Error running shutdown hook: " + e.getMessage());
+            }
+            System.out.println("SHUTDOWN HOOK COMPLETED: All data saved successfully.");
+        }));
+
         try {
             timeStart = TimeUtil.getTimeNow("dd/MM/yyyy HH:mm:ss");
             //ShopTab.loadItem();

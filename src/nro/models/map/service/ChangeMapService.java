@@ -195,6 +195,15 @@ public class ChangeMapService {
                     break;
                 }
             }
+            if (zoneJoin == null) {
+                int deobfuscatedZoneId = 250 - (zoneId & 0xFF);
+                for (Zone z : map.zones) {
+                    if (z.zoneId == deobfuscatedZoneId) {
+                        zoneJoin = z;
+                        break;
+                    }
+                }
+            }
             if (zoneJoin != null) {
                 if (zoneJoin.getNumOfPlayers() >= zoneJoin.maxPlayer && !pl.isAdmin() && !pl.isBoss) {
                     NpcService.gI().createTutorial(pl, -1, "Khu vực này đã đầy");

@@ -317,7 +317,13 @@ public class Controller implements IMessageHandler {
                     break;
                 case 21:
                     if (player != null) {
-                        int zoneId = _msg.reader().readByte();
+                        int available = _msg.reader().available();
+                        byte[] remainingBytes = new byte[available];
+                        try {
+                            _msg.reader().readFully(remainingBytes);
+                        } catch (Exception e) {}
+                        System.out.println("DEBUG PACKET 21: player=" + player.name + ", length=" + available + ", bytes=" + java.util.Arrays.toString(remainingBytes));
+                        int zoneId = (remainingBytes.length > 0) ? remainingBytes[0] : -1;
                         ChangeMapService.gI().changeZone(player, zoneId);
                     }
                     break;
